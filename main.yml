@@ -11,3 +11,5 @@
     tags: ['ssh']
   - role: packages
     tags: ['packages']
+  - role: nginx
+    tags: ['nginx']

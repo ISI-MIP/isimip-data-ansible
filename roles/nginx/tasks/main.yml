@@ -1,0 +1,16 @@
+---
+
+- name: nginx is installed
+  apt: name=nginx  state=present
+
+- name: nginx config is present
+  copy:
+    src: "{{ ansible_host }}.conf"
+    dest: /etc/nginx/sites-available/default
+  notify:
+  - restart nginx
+
+- name: index.html is present
+  template:
+    src: index.html
+    dest: /var/www/html/index.html

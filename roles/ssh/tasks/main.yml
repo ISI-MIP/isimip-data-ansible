@@ -1,12 +1,19 @@
 ---
+
 - name: ssh keys for root
-  authorized_key: user=root key="{{ item }}" state=present
+  authorized_key:
+    user: root
+    key: "{{ item }}"
+    state: present
   with_file:
   - jochen@klarpc.pub
   - jochen@klarbook.pub
 
 - name: ssh keys for ubuntu
-  authorized_key: user=ubuntu key="{{ item }}" state=present
+  authorized_key:
+    user: ubuntu
+    key: "{{ item }}"
+    state: present
   with_file:
   - jochen@klarpc.pub
   - jochen@klarbook.pub

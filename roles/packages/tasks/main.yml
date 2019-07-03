@@ -1,7 +1,11 @@
 ---
 
 - name: all packages are on the latest version
-  apt: update_cache=yes upgrade=dist
+  apt:
+    upgrade: dist
+    update_cache: yes
 
 - name: common packages are present
-  apt: name="{{ packages }}" state=present
+  apt:
+    name: "{{ packages }}"
+    state: present
