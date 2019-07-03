@@ -1,0 +1,22 @@
+---
+
+- name: red prompt for root
+  lineinfile: dest=/root/.bashrc line="export PS1='[\[\e[0;31m\]\u@\h\[\e[0m\] \W]\$ '"
+
+- name: include .bash_aliases in /root/.bashrc
+  lineinfile: dest=/root/.bashrc line="source /root/.bash_aliases"
+
+- name: /root/.bash_aliases
+  copy: src=bash_aliases dest=/root/.bash_aliases
+
+- name: /root/.emacs
+  copy: src=emacs dest=/root/.emacs
+
+- name: include .bash_aliases in /home/ubuntu/.bashrc
+  lineinfile: dest=/home/ubuntu/.bashrc line="source /home/ubuntu/.bash_aliases"
+
+- name: /home/ubuntu/.bash_aliases
+  copy: src=bash_aliases dest=/home/ubuntu/.bash_aliases
+
+- name: /home/ubuntu/.emacs
+  copy: src=emacs dest=/home/ubuntu/.emacs

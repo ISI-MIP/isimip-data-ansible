@@ -1,0 +1,59 @@
+---
+packages:
+- aptitude
+- sudo
+- pwgen
+- screen
+- fail2ban
+- rsync
+
+# editor
+- vim
+- nano
+- emacs-nox
+
+# development
+- build-essential
+- cmake
+- git
+- subversion
+
+# compression
+- zip
+- unzip
+- bzip2
+
+# monitoring
+- strace
+- dstat
+- htop
+- iotop
+- iftop
+- glances
+- iperf3
+- iftop
+- ncdu
+
+# network
+- telnet
+- wget
+- curl
+- nmap
+
+# hardware
+- smartmontools
+- pciutils
+- ethtool
+- lsscsi
+- sysstat
+- pv
+- lsof
+- inxi
+
+# python
+- python3-dev
+- python3-pip
+- python3-venv
+
+# other
+- silversearcher-ag

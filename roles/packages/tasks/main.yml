@@ -1,0 +1,4 @@
+---
+
+- name: common packages are present
+  apt: name="{{ packages }}" state=present

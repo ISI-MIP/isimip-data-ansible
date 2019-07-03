@@ -1,0 +1,13 @@
+---
+
+- name: all hosts
+  hosts: all
+  become: yes
+  become_user: root
+  roles:
+  - role: config
+    tags: ['config']
+  - role: ssh
+    tags: ['ssh']
+  - role: packages
+    tags: ['packages']

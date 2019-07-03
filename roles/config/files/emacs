@@ -1,0 +1,5 @@
+(line-number-mode t)
+(column-number-mode t)
+
+(setq make-backup-files nil)
+(setq-default indent-tabs-mode nil)
