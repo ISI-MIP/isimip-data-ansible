@@ -8,12 +8,3 @@
   with_file:
   - jochen@klarpc.pub
   - jochen@klarbook.pub
-
-- name: ssh keys for ubuntu
-  authorized_key:
-    user: ubuntu
-    key: "{{ item }}"
-    state: present
-  with_file:
-  - jochen@klarpc.pub
-  - jochen@klarbook.pub

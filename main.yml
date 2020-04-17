@@ -2,8 +2,7 @@
 
 - name: all hosts
   hosts: all
-  become: yes
-  become_user: root
+  user: root
   roles:
   - role: config
     tags: ['config']
@@ -13,3 +12,7 @@
     tags: ['packages']
   - role: nginx
     tags: ['nginx']
+  - role: isimip_data
+    tags: ['isimip_data']
+  - role: isimip_files_api
+    tags: ['isimip_data']

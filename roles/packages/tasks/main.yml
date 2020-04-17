@@ -1,11 +1,6 @@
 ---
 
-- name: all packages are on the latest version
-  apt:
-    upgrade: dist
-    update_cache: yes
-
 - name: common packages are present
-  apt:
+  zypper:
     name: "{{ packages }}"
     state: present

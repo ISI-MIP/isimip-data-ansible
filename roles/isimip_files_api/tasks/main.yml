@@ -1,0 +1,15 @@
+- name: tmpfiles.d conf is present
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+  when: ansible_host == "files.isimip.org"
+  with_items:
+  - api.service
+  - api-app.service
+  - api-worker.service
+
+- name: systemd services are present
+  copy:
+    src: "api.conf"
+    dest: "/etc/tmpfiles.d/api.conf"
+  when: ansible_host == "files.isimip.org"

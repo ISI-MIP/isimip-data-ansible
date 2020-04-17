@@ -1,11 +1,8 @@
 ---
 
 packages:
-- aptitude
-- sudo
 - pwgen
 - screen
-- fail2ban
 - rsync
 
 # editor
@@ -14,10 +11,7 @@ packages:
 - emacs-nox
 
 # development
-- build-essential
-- cmake
 - git
-- subversion
 
 # compression
 - zip
@@ -25,13 +19,9 @@ packages:
 - bzip2
 
 # monitoring
-- strace
 - dstat
 - htop
 - iotop
-- iftop
-- glances
-- iperf3
 - iftop
 - ncdu
 
@@ -43,18 +33,10 @@ packages:
 
 # hardware
 - smartmontools
-- pciutils
-- ethtool
 - lsscsi
-- sysstat
 - pv
 - lsof
 - inxi
 
-# python
-- python3-dev
-- python3-pip
-- python3-venv
-
 # other
-- silversearcher-ag
+- the_silver_searcher

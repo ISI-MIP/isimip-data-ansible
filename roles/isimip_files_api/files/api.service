@@ -1,0 +1,10 @@
+[Unit]
+Description=pseudo-service to start/stop all isimip-files-api services
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+RemainAfterExit=yes
+
+[Install]
+WantedBy=network.target

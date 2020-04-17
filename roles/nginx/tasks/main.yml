@@ -1,16 +1,40 @@
 ---
 
 - name: nginx is installed
-  apt: name=nginx  state=present
+  zypper:
+    name: nginx
+    state: present
 
 - name: nginx config is present
   copy:
     src: "{{ ansible_host }}.conf"
-    dest: /etc/nginx/sites-available/default
+    dest: /etc/nginx/vhosts.d/{{ ansible_host }}.conf
   notify:
   - restart nginx
+
+- name: nginx config for dev.isimip.org is present on data.isimip.org
+  copy:
+    src: "dev.isimip.org.conf"
+    dest: /etc/nginx/vhosts.d/dev.isimip.org.conf
+  when: ansible_host == "data.isimip.org"
+  notify:
+  - restart nginx
+
+- name: firewalld allows http connections
+  firewalld:
+    service: http
+    permanent: yes
+    immediate: yes
+    state: enabled
 
 - name: index.html is present
   template:
     src: index.html
-    dest: /var/www/html/index.html
+    dest: /srv/www/htdocs/index.html
+
+- name: /data/public is present on files.isimip.org
+  file:
+    path: /data/public
+    state: directory
+    mode: '0755'
+  when: ansible_host == "files.isimip.org"
