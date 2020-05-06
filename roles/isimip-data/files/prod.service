@@ -6,9 +6,9 @@ After=network.target
 User=isimip
 Group=isimip
 
-WorkingDirectory=/home/isimip/isimip-data/data
-EnvironmentFile=/home/isimip/isimip-data/data/.env
-GUNICORN_BIN=/home/isimip/isimip-data/data/env/bin/gunicorn
+WorkingDirectory=/srv/www/prod
+EnvironmentFile=/srv/www/prod/.env
+GUNICORN_BIN=/srv/www/prod/env/bin/gunicorn
 GUNICORN_WORKER=3
 GUNICORN_PORT=9001
 GUNICORN_PID_FILE=/run/gunicorn/data/pid

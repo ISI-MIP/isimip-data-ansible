@@ -12,7 +12,12 @@
     tags: ['packages']
   - role: nginx
     tags: ['nginx']
-  - role: isimip_data
-    tags: ['isimip_data']
-  - role: isimip_files_api
-    tags: ['isimip_data']
+  - role: isimip-data
+    tags: ['isimip-data']
+    when: ansible_host == "data.isimip.org"
+  - role: isimip-files-api
+    tags: ['isimip-data']
+    when: ansible_host == "files.isimip.org"
+  - role: isimip-publisher
+    tags: ['isimip-publisher']
+    when: ansible_host == "files.isimip.org"

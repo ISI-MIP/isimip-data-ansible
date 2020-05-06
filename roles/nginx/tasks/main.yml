@@ -31,10 +31,3 @@
   template:
     src: index.html
     dest: /srv/www/htdocs/index.html
-
-- name: /data/public is present on files.isimip.org
-  file:
-    path: /data/public
-    state: directory
-    mode: '0755'
-  when: ansible_host == "files.isimip.org"

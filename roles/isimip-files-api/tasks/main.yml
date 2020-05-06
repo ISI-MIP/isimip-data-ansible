@@ -1,0 +1,43 @@
+- name: Add the isimip group
+  group:
+    name: isimip
+    gid: 2000
+    state: present
+
+- name: Add the isimip-files-api user
+  user:
+    name: isimip-files-api
+    comment: isimip-files-api user
+    uid: 2001
+    group: isimip
+    shell: /bin/bash
+
+- name: Create /srv/www/api for isimip-data
+  file:
+    path: /srv/www/api
+    state: directory
+    owner: isimip-files-api
+    group: isimip
+
+- name: Clone the isimip-files-api repo
+  git:
+    repo: 'https://github.com/ISI-MIP/isimip-files-api'
+    dest: /srv/www/api
+    update: no
+  become_user: isimip-files-api
+
+- name: tmpfiles.d conf is present
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+  when: ansible_host == "files.isimip.org"
+  with_items:
+  - api.service
+  - api-app.service
+  - api-worker.service
+
+- name: systemd services are present
+  copy:
+    src: "api.conf"
+    dest: "/etc/tmpfiles.d/api.conf"
+  when: ansible_host == "files.isimip.org"

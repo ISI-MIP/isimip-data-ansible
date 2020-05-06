@@ -1,0 +1,58 @@
+- name: Add the isimip group
+  group:
+    name: isimip
+    gid: 2000
+    state: present
+
+- name: Add the isimip-data user
+  user:
+    name: isimip-data
+    comment: isimip-data user
+    uid: 2000
+    group: isimip
+    shell: /bin/bash
+
+- name: Install PostgreSQL 10
+  zypper:
+    name:
+    - postgresql10
+    - postgresql10-server
+    - postgresql10-devel
+    state: present
+
+- name: Create /srv/www/prod and /srv/www/dev for isimip-data
+  file:
+    path: /srv/www/{{ item }}
+    state: directory
+    owner: isimip-data
+    group: isimip
+  with_items:
+  - prod
+  - dev
+
+- name: Clone the isimip-data repo
+  git:
+    repo: 'https://github.com/ISI-MIP/isimip-data'
+    dest: /srv/www/{{ item }}
+    update: no
+  become: yes
+  become_user: isimip-data
+  with_items:
+  - prod
+  - dev
+
+- name: Copy systemd service files
+  copy:
+    src: "{{ item }}.service"
+    dest: "/etc/systemd/system/{{ item }}.service"
+  with_items:
+  - prod
+  - dev
+
+- name: Copy tmpfiles.d files
+  copy:
+    src: "{{ item }}.conf"
+    dest: "/etc/tmpfiles.d/{{ item }}.conf"
+  with_items:
+  - prod
+  - dev

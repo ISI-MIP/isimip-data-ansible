@@ -1,17 +1,17 @@
 ---
 
 packages:
+# utils
 - pwgen
 - screen
 - rsync
+- git
+- the_silver_searcher
 
 # editor
 - vim
 - nano
 - emacs-nox
-
-# development
-- git
 
 # compression
 - zip
@@ -37,6 +37,3 @@ packages:
 - pv
 - lsof
 - inxi
-
-# other
-- the_silver_searcher

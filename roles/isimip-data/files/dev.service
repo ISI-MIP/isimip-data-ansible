@@ -3,12 +3,12 @@ Description=dev.isimip.org gunicorn daemon
 After=network.target
 
 [Service]
-User=isimip
+User=isimip-data
 Group=isimip
 
-WorkingDirectory=/home/isimip/isimip-data/dev
-EnvironmentFile=/home/isimip/isimip-data/dev/.env
-GUNICORN_BIN=/home/isimip/isimip-data/dev/env/bin/gunicorn
+WorkingDirectory=/srv/www/dev
+EnvironmentFile=/srv/www/dev/.env
+GUNICORN_BIN=/srv/www/dev/env/bin/gunicorn
 GUNICORN_WORKER=3
 GUNICORN_PORT=9001
 GUNICORN_PID_FILE=/run/gunicorn/dev/pid

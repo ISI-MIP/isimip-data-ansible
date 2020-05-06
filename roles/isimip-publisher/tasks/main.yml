@@ -1,0 +1,32 @@
+- name: Add the isimip group
+  group:
+    name: isimip
+    gid: 2000
+    state: present
+
+- name: Add the isimip user
+  user:
+    name: isimip
+    comment: isimip user
+    uid: 2000
+    group: isimip
+    shell: /bin/bash
+
+- name: Clone the isimip-publisher repo
+  git:
+    repo: 'https://github.com/ISI-MIP/isimip-publisher'
+    dest: /home/isimip/isimip-publisher
+    update: no
+  become_user: isimip-files-api
+
+- name: /data is present on files.isimip.org
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: isimip
+    group: isimip
+    mode: '0755'
+  with_items:
+  - /data
+  - /data/public
+  - /data/archive
