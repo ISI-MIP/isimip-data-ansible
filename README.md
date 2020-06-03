@@ -1,8 +1,6 @@
 Ansible playbook for data.isimip.org and files.isimip.org
 =========================================================
 
-This software is currently under development.
-
 Setup
 -----
 
