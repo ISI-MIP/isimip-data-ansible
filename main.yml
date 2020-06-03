@@ -2,21 +2,22 @@
 
 - name: all hosts
   hosts: all
-  user: root
+  become: yes
+  become_user: root
   roles:
   - role: config
     tags: ['config']
-  - role: ssh
-    tags: ['ssh']
   - role: packages
     tags: ['packages']
   - role: nginx
     tags: ['nginx']
+  - role: redis
+    tags: ['redis']
   - role: isimip-data
     tags: ['isimip-data']
     when: ansible_host == "data.isimip.org"
   - role: isimip-files-api
-    tags: ['isimip-data']
+    tags: ['isimip-files-api']
     when: ansible_host == "files.isimip.org"
   - role: isimip-publisher
     tags: ['isimip-publisher']

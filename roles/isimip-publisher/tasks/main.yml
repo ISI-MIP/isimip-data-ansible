@@ -17,7 +17,7 @@
     repo: 'https://github.com/ISI-MIP/isimip-publisher'
     dest: /home/isimip/isimip-publisher
     update: no
-  become_user: isimip-files-api
+  become_user: isimip
 
 - name: /data is present on files.isimip.org
   file:

@@ -20,13 +20,6 @@
   notify:
   - restart nginx
 
-- name: firewalld allows http connections
-  firewalld:
-    service: http
-    permanent: yes
-    immediate: yes
-    state: enabled
-
 - name: index.html is present
   template:
     src: index.html

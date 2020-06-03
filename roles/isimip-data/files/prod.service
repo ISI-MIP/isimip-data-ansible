@@ -3,17 +3,11 @@ Description=data.isimip.org gunicorn daemon
 After=network.target
 
 [Service]
-User=isimip
+User=isimip-data
 Group=isimip
 
 WorkingDirectory=/srv/www/prod
 EnvironmentFile=/srv/www/prod/.env
-GUNICORN_BIN=/srv/www/prod/env/bin/gunicorn
-GUNICORN_WORKER=3
-GUNICORN_PORT=9001
-GUNICORN_PID_FILE=/run/gunicorn/data/pid
-GUNICORN_ACCESS_LOG_FILE=/var/log/gunicorn/data/access.log
-GUNICORN_ERROR_LOG_FILE=/var/log/gunicorn/data/error.log
 
 ExecStart=/bin/sh -c '${GUNICORN_BIN} \
   --workers ${GUNICORN_WORKER} \

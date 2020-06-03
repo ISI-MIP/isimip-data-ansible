@@ -1,0 +1,17 @@
+---
+
+- name: install redis
+  zypper:
+    name: "redis"
+    state: present
+
+- name: copy the default redis config
+  copy:
+    src: /etc/redis/default.conf.example
+    dest: /etc/redis/redis.conf
+    remote_src: yes
+
+- name: systemd services are present
+  copy:
+    src: redis.service
+    dest: /etc/systemd/system/redis.service

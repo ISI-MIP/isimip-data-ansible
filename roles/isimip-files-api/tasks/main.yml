@@ -41,3 +41,13 @@
     src: "api.conf"
     dest: "/etc/tmpfiles.d/api.conf"
   when: ansible_host == "files.isimip.org"
+
+- name: /data/api/public is present on files.isimip.org
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: isimip-files-api
+    group: isimip
+    mode: '0755'
+  with_items:
+  - /data/api/public

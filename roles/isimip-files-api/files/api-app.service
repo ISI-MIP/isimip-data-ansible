@@ -4,18 +4,11 @@ PartOf=api.service
 After=api.service
 
 [Service]
-User=isimip
+User=isimip-files-api
 Group=isimip
 
-WorkingDirectory=/home/isimip/api
-EnvironmentFile=/home/isimip/api/.env
-Environment=GUNICORN_BIN=/home/isimip/api/env/bin/gunicorn
-Environment=GUNICORN_WORKER=3
-Environment=GUNICORN_PORT=9002
-Environment=GUNICORN_TIMEOUT=120
-Environment=GUNICORN_PID_FILE=/run/gunicorn/api/pid
-Environment=GUNICORN_ACCESS_LOG_FILE=/var/log/gunicorn/api/access.log
-Environment=GUNICORN_ERROR_LOG_FILE=/var/log/gunicorn/api/error.log
+WorkingDirectory=/srv/www/api
+EnvironmentFile=/srv/www/api/.env
 
 ExecStart=/bin/sh -c '${GUNICORN_BIN} \
   --workers ${GUNICORN_WORKER} \

@@ -8,12 +8,6 @@ Group=isimip
 
 WorkingDirectory=/srv/www/dev
 EnvironmentFile=/srv/www/dev/.env
-GUNICORN_BIN=/srv/www/dev/env/bin/gunicorn
-GUNICORN_WORKER=3
-GUNICORN_PORT=9001
-GUNICORN_PID_FILE=/run/gunicorn/dev/pid
-GUNICORN_ACCESS_LOG_FILE=/var/log/gunicorn/dev/access.log
-GUNICORN_ERROR_LOG_FILE=/var/log/gunicorn/dev/error.log
 
 ExecStart=/bin/sh -c '${GUNICORN_BIN} \
   --workers ${GUNICORN_WORKER} \
