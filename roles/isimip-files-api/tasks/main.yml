@@ -26,7 +26,7 @@
     update: no
   become_user: isimip-files-api
 
-- name: tmpfiles.d conf is present
+- name: systemd services are present
   copy:
     src: "{{ item }}"
     dest: "/etc/systemd/system/{{ item }}"
@@ -36,7 +36,7 @@
   - api-app.service
   - api-worker.service
 
-- name: systemd services are present
+- name: tmpfiles.d conf is present
   copy:
     src: "api.conf"
     dest: "/etc/tmpfiles.d/api.conf"
