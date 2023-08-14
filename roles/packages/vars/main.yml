@@ -5,7 +5,7 @@ packages:
 - pwgen
 - screen
 - rsync
-- git
+- git-core
 - the_silver_searcher
 - tree
 

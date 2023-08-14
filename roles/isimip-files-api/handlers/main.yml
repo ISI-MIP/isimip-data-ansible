@@ -1,0 +1,16 @@
+- name: Restart app
+  systemd:
+    name: "api-app"
+    state: restarted
+    enabled: yes
+
+- name: Restart workers
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+  - api-worker@1
+  - api-worker@2
+  - api-worker@3
+  - api-worker@4

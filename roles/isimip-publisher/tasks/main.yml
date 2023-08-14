@@ -12,6 +12,16 @@
     group: isimip
     shell: /bin/bash
 
+- name: Install dependencies
+  zypper:
+    name:
+    - gcc
+    - gcc-c++
+    - python3-devel
+    - libproj-devel
+    - geos-devel
+    state: present
+
 - name: Clone the isimip-publisher repo
   git:
     repo: 'https://github.com/ISI-MIP/isimip-publisher'
@@ -30,8 +40,3 @@
   - /data
   - /data/public
   - /data/archive
-
-- name: tmpfiles.d conf is present
-  copy:
-    src: "publisher.conf"
-    dest: "/etc/tmpfiles.d/publisher.conf"

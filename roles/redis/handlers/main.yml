@@ -1,6 +1,6 @@
 ---
 
-- name: Restart nginx
+- name: Restart redis
   service:
     name: nginx
     state: restarted

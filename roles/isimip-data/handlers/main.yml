@@ -1,0 +1,12 @@
+- name: Restart gunicorn
+  systemd:
+    name: "{{ env }}"
+    state: restarted
+    enabled: yes
+
+- name: Run npm run build:prod
+  become: yes
+  become_user: isimip
+  shell:
+    cmd: /bin/bash -c "source ~/.nvm/nvm.sh && nvm install && npm install && npm run build:prod"
+    chdir: /srv/www/{{ env }}

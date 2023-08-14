@@ -1,26 +1,30 @@
 ---
 
-- name: nginx is installed
+- name: Install nginx and certbot
   zypper:
-    name: nginx
+    name:
+    - nginx
+    - apache2-utils
+    - python3-certbot-nginx
     state: present
 
-- name: nginx config is present
-  copy:
-    src: "{{ ansible_host }}.conf"
-    dest: /etc/nginx/vhosts.d/{{ ansible_host }}.conf
-  notify:
-  - restart nginx
-
-- name: nginx config for dev.isimip.org is present on data.isimip.org
-  copy:
-    src: "dev.isimip.org.conf"
-    dest: /etc/nginx/vhosts.d/dev.isimip.org.conf
-  when: ansible_host == "data.isimip.org"
-  notify:
-  - restart nginx
-
-- name: index.html is present
+- name: Create nginx config for data.isimip.org
   template:
-    src: index.html
-    dest: /srv/www/htdocs/index.html
+    src: "{{ data_url }}.conf"
+    dest: /etc/nginx/vhosts.d/{{ data_url }}.conf
+  when: "'data' in group_names"
+  notify:
+  - Restart nginx
+
+- name: Create config for files.isimip.org
+  template:
+    src: "{{ files_url }}.conf"
+    dest: /etc/nginx/vhosts.d/{{ files_url }}.conf
+  when: "'files' in group_names"
+  notify:
+  - Restart nginx
+
+- name: Copy 502.html
+  copy:
+    src: 502.html
+    dest: /srv/www/htdocs/502.html

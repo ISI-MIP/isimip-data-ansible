@@ -1,7 +1,6 @@
 [Unit]
 Description=isimip-files-api gunicorn daemon
-PartOf=api.service
-After=api.service
+After=network.target
 
 [Service]
 User=isimip-files-api
@@ -24,4 +23,4 @@ ExecReload=/bin/sh -c '/usr/bin/pkill -HUP -F ${GUNICORN_PID_FILE}'
 ExecStop=/bin/sh -c '/usr/bin/pkill -TERM -F ${GUNICORN_PID_FILE}'
 
 [Install]
-WantedBy=api.target
+WantedBy=multi-user.target

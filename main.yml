@@ -6,19 +6,28 @@
   become_user: root
   roles:
   - role: config
-    tags: ['config']
+    tags: config
   - role: packages
-    tags: ['packages']
+    tags: packages
   - role: nginx
-    tags: ['nginx']
+    tags: nginx
   - role: redis
-    tags: ['redis']
+    tags: redis
+
+- name: data.isimip.org
+  hosts: data
+  become: yes
+  become_user: root
+  roles:
   - role: isimip-data
-    tags: ['isimip-data']
-    when: ansible_host == "data.isimip.org"
+    tags: isimip-data
+
+- name: files.isimip.org
+  hosts: files
+  become: yes
+  become_user: root
+  roles:
   - role: isimip-files-api
-    tags: ['isimip-files-api']
-    when: ansible_host == "files.isimip.org"
+    tags: isimip-files-api
   - role: isimip-publisher
-    tags: ['isimip-publisher']
-    when: ansible_host == "files.isimip.org"
+    tags: isimip-publisher

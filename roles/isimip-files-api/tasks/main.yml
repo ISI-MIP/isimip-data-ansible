@@ -25,22 +25,20 @@
     dest: /srv/www/api
     update: no
   become_user: isimip-files-api
+  notify:
+  - Restart app
+  - Restart workers
 
-- name: systemd services are present
+- name: Copy systemd service files
   copy:
     src: "{{ item }}"
     dest: "/etc/systemd/system/{{ item }}"
-  when: ansible_host == "files.isimip.org"
   with_items:
-  - api.service
   - api-app.service
-  - api-worker.service
-
-- name: tmpfiles.d conf is present
-  copy:
-    src: "api.conf"
-    dest: "/etc/tmpfiles.d/api.conf"
-  when: ansible_host == "files.isimip.org"
+  - api-worker@.service
+  notify:
+  - Restart app
+  - Restart workers
 
 - name: /data/api/public is present on files.isimip.org
   file:

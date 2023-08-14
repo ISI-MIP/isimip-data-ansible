@@ -4,55 +4,58 @@
     gid: 2000
     state: present
 
-- name: Add the isimip-data user
+- name: Add the isimip user
   user:
-    name: isimip-data
-    comment: isimip-data user
+    name: isimip
+    comment: isimip user
     uid: 2000
     group: isimip
     shell: /bin/bash
 
-- name: Install PostgreSQL 10
+- name: Install PostgreSQL 15
   zypper:
     name:
-    - postgresql10
-    - postgresql10-server
-    - postgresql10-devel
+    - postgresql15
+    - postgresql15-server
+    - postgresql15-devel
     state: present
 
-- name: Create /srv/www/prod and /srv/www/dev for isimip-data
+- name: Create /srv/www/prod or /srv/www/dev for isimip-data
   file:
-    path: /srv/www/{{ item }}
+    path: /srv/www/{{ env }}
     state: directory
-    owner: isimip-data
+    owner: isimip
     group: isimip
-  with_items:
-  - prod
-  - dev
 
 - name: Clone the isimip-data repo
+  become: yes
+  become_user: isimip
   git:
     repo: 'https://github.com/ISI-MIP/isimip-data'
-    dest: /srv/www/{{ item }}
+    dest: /srv/www/{{ env }}
     update: no
+  notify:
+  - Run npm run build:prod
+  - Restart gunicorn
+
+- name: Upgrade the isimip-data repo
   become: yes
-  become_user: isimip-data
-  with_items:
-  - prod
-  - dev
+  become_user: isimip
+  git:
+    repo: 'https://github.com/ISI-MIP/isimip-data'
+    dest: /srv/www/{{ env }}
+    update: yes
+    force: yes
+  notify:
+  - Run npm run build:prod
+  - Restart gunicorn
+  tags:
+  - upgrade
+  - never
 
 - name: Copy systemd service files
-  copy:
-    src: "{{ item }}.service"
-    dest: "/etc/systemd/system/{{ item }}.service"
-  with_items:
-  - prod
-  - dev
-
-- name: Copy tmpfiles.d files
-  copy:
-    src: "{{ item }}.conf"
-    dest: "/etc/tmpfiles.d/{{ item }}.conf"
-  with_items:
-  - prod
-  - dev
+  template:
+    src: "data.service"
+    dest: "/etc/systemd/system/{{ env }}.service"
+  notify:
+  - Restart gunicorn

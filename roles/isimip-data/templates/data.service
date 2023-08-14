@@ -1,13 +1,16 @@
 [Unit]
-Description=dev.isimip.org gunicorn daemon
+Description={{ data_url }} gunicorn daemon
 After=network.target
 
 [Service]
-User=isimip-data
+User=isimip
 Group=isimip
 
-WorkingDirectory=/srv/www/dev
-EnvironmentFile=/srv/www/dev/.env
+WorkingDirectory=/srv/www/{{ env }}
+EnvironmentFile=/srv/www/{{ env }}/.env
+
+LogsDirectory=django/{{ env }} gunicorn/{{ env }}
+RuntimeDirectory=gunicorn/{{ env }}
 
 ExecStart=/bin/sh -c '${GUNICORN_BIN} \
   --workers ${GUNICORN_WORKER} \

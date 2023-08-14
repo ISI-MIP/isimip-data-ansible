@@ -1,6 +1,6 @@
 ---
 
-- name: common packages are present
+- name: Install common packages
   zypper:
     name: "{{ packages }}"
     state: present

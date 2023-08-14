@@ -1,33 +1,33 @@
 ---
 
-- name: /root/.bash_aliases
+- name: Copy /root/.bash_aliases
   copy:
     src: bash_aliases
     dest: /root/.bash_aliases
 
-- name: /etc/skel/.bash_aliases
+- name: Copy/etc/skel/.bash_aliases
   copy:
     src: bash_aliases
     dest: /etc/skel/.bash_aliases
 
-- name: include .bash_aliases in /root/.bashrc
+- name: Include .bash_aliases in /root/.bashrc
   lineinfile:
     dest: /root/.bashrc
     line: "source /root/.bash_aliases"
     create: yes
 
-- name: include .bash_aliases in /etc/skel/.bashrc
+- name: Include .bash_aliases in /etc/skel/.bashrc
   lineinfile:
     dest: /etc/skel/.bashrc
     line: "source ~/.bash_aliases"
     create: yes
 
-- name: /root/.emacs
+- name: Copy /root/.emacs
   copy:
     src: emacs
     dest: /root/.emacs
 
-- name: /etc/skel/.emacs
+- name: Copy /etc/skel/.emacs
   copy:
     src: emacs
     dest: /etc/skel/.emacs

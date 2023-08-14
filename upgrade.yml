@@ -1,0 +1,8 @@
+---
+
+- name: data.isimip.org
+  hosts: data
+  become: yes
+  become_user: root
+  roles:
+  - role: isimip-data

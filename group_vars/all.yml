@@ -1,0 +1,3 @@
+env: "prod"
+data_url: "{% if env == 'prod' %}data.isimip.org{% else %}{{ env }}.isimip.org{% endif %}"
+files_url: "files.isimip.org"
