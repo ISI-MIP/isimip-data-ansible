@@ -1,0 +1,6 @@
+- name: Create config for files.isimip.org
+  template:
+    src: "{{ files_url }}.conf"
+    dest: /etc/nginx/vhosts.d/{{ files_url }}.conf
+  notify:
+  - Restart nginx

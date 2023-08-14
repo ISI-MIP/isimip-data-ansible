@@ -1,5 +1,3 @@
----
-
 - name: Install nginx and certbot
   zypper:
     name:
@@ -7,22 +5,6 @@
     - apache2-utils
     - python3-certbot-nginx
     state: present
-
-- name: Create nginx config for data.isimip.org
-  template:
-    src: "{{ data_url }}.conf"
-    dest: /etc/nginx/vhosts.d/{{ data_url }}.conf
-  when: "'data' in group_names"
-  notify:
-  - Restart nginx
-
-- name: Create config for files.isimip.org
-  template:
-    src: "{{ files_url }}.conf"
-    dest: /etc/nginx/vhosts.d/{{ files_url }}.conf
-  when: "'files' in group_names"
-  notify:
-  - Restart nginx
 
 - name: Copy 502.html
   copy:

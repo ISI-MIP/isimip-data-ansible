@@ -1,5 +1,3 @@
----
-
 - name: Install common packages
   zypper:
     name: "{{ packages }}"

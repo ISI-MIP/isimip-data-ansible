@@ -27,6 +27,8 @@
   become: yes
   become_user: root
   roles:
+  - role: isimip-files
+    tags: isimip-files
   - role: isimip-files-api
     tags: isimip-files-api
   - role: isimip-publisher

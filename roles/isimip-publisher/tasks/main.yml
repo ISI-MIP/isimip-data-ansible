@@ -29,7 +29,7 @@
     update: no
   become_user: isimip
 
-- name: /data is present on files.isimip.org
+- name: Create /data
   file:
     path: "{{ item }}"
     state: directory

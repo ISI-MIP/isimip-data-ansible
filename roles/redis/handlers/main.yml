@@ -1,5 +1,3 @@
----
-
 - name: Restart redis
   service:
     name: nginx

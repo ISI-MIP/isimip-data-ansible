@@ -19,7 +19,6 @@
     - postgresql15-server
     - postgresql15-devel
     state: present
-
 - name: Create /srv/www/prod or /srv/www/dev for isimip-data
   file:
     path: /srv/www/{{ env }}
@@ -59,3 +58,11 @@
     dest: "/etc/systemd/system/{{ env }}.service"
   notify:
   - Restart gunicorn
+
+- name: Create nginx config for data.isimip.org
+  template:
+    src: "{{ data_url }}.conf"
+    dest: /etc/nginx/vhosts.d/{{ data_url }}.conf
+  when: "'data' in group_names"
+  notify:
+  - Restart nginx

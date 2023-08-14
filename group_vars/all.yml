@@ -1,3 +1,4 @@
-env: "prod"
-data_url: "{% if env == 'prod' %}data.isimip.org{% else %}{{ env }}.isimip.org{% endif %}"
-files_url: "files.isimip.org"
+env: prod
+data_url: data.isimip.org
+data_gunicorn_port: 9000
+files_url: files.isimip.org

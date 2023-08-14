@@ -8,6 +8,7 @@ Group=redis
 ExecStart=/usr/sbin/redis-server /etc/redis/redis.conf
 ExecStop=/usr/bin/redis-cli shutdown
 Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
