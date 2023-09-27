@@ -4,9 +4,9 @@
     state: restarted
     enabled: yes
 
-- name: Run npm run build:prod
+- name: Run manage.py deploy
   become: yes
   become_user: isimip
   shell:
-    cmd: /bin/bash -c "source ~/.nvm/nvm.sh && nvm install && npm install && npm run build:prod"
+    cmd: /bin/bash -c "env/bin/python manage.py deploy"
     chdir: /srv/www/{{ env }}

@@ -34,7 +34,7 @@
     dest: /srv/www/{{ env }}
     update: no
   notify:
-  - Run npm run build:prod
+  - Run manage.py deploy
   - Restart gunicorn
 
 - name: Upgrade the isimip-data repo
@@ -46,7 +46,7 @@
     update: yes
     force: yes
   notify:
-  - Run npm run build:prod
+  - Run manage.py deploy
   - Restart gunicorn
   tags:
   - upgrade
