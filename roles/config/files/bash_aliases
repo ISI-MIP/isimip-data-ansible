@@ -8,19 +8,14 @@ alias t='tail -f'
 alias grep='grep --color'
 
 alias gits='git status'
-alias gita='git add .'
 alias gitc='git commit -am'
-alias gitl='git log'
+alias gitl='git log --oneline'
 alias gitb='git branch'
-alias gitd='git diff'
-alias gitu='git diff | grep -C 3 -f ~/.gitunwanted'
 
-alias sv='service'
 alias sd='sudo -i'
 alias ap='aptitude'
 
 alias ve='source env/bin/activate'
-alias ve3='source env3/bin/activate'
 alias de='deactivate'
 
 alias psg='ps auxw | grep --color'

@@ -1,5 +1,5 @@
 (line-number-mode t)
 (column-number-mode t)
-
 (setq make-backup-files nil)
+(setq frame-background-mode 'dark)
 (setq-default indent-tabs-mode nil)
