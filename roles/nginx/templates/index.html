@@ -1,16 +1,17 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ ansible_host }}</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; width: 600px; margin: 60px auto; color: #333; }
+    img { width: 400px; margin-bottom: 40px; }
+    h1 { font-size: 1.2em; margin-bottom: 20px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+    <img src="isimip.png" alt="ISIMIP logo"/>
 
-    <head>
-        <title>{{ ansible_host }}</title>
-        <meta charset="UTF-8" />
-
-        <style>
-            body {font-family: sans;}
-        </style>
-    </head>
-
-    <body>
-        <h1>{{ ansible_host }}</h1>
-    </body>
-
+    <h1>{{ ansible_host }}</h1>
+</body>
 </html>

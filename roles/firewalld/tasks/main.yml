@@ -1,0 +1,10 @@
+- name: Open HTTP and HTTPS in firewalld public zone
+  ansible.posix.firewalld:
+    zone: public
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+  loop:
+    - http
+    - https
+  notify: Reload firewalld

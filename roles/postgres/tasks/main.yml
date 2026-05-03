@@ -1,0 +1,41 @@
+- name: Install postgres
+  zypper:
+    name:
+    - postgresql18
+    - postgresql18-server
+    - postgresql18-contrib
+    state: present
+  notify: Restart postgresql
+
+- name: Uncomment and set listen_addresses to '*'
+  ansible.builtin.replace:
+    path: /var/lib/pgsql/data/postgresql.conf
+    regexp: "^#?listen_addresses\\s*=\\s*'localhost'(.*)$"
+    replace: "listen_addresses = '*'     \\1"
+    backup: yes
+  notify: Restart postgresql
+
+- name: Use scram-sha-256 for IPv4 loopback
+  lineinfile:
+    path: /var/lib/pgsql/data/pg_hba.conf
+    regexp: '^host\s+all\s+all\s+127\.0\.0\.1/32\s+ident\s*$'
+    line: "host    all             all             0.0.0.0/0               scram-sha-256"
+  notify: Restart postgresql
+
+- name: Use scram-sha-256 for IPv6 loopback
+  lineinfile:
+    path: /var/lib/pgsql/data/pg_hba.conf
+    regexp: '^host\s+all\s+all\s+::1/128\s+ident\s*$'
+    line: "host    all             all             ::/0                    scram-sha-256"
+  notify: Restart postgresql
+
+- name: Check if cluster is initialized
+  stat:
+    path: /var/lib/pgsql/data/PG_VERSION
+  register: pgdata
+
+- name: Initialize the cluster
+  become: true
+  become_user: postgres
+  command: /usr/lib/postgresql18/bin/initdb -D /var/lib/pgsql/data
+  when: not pgdata.stat.exists

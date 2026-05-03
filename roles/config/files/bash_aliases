@@ -9,14 +9,22 @@ alias grep='grep --color'
 
 alias gits='git status'
 alias gitc='git commit -am'
-alias gitl='git log --oneline'
+alias gitl='git log'
 alias gitb='git branch'
 
 alias sd='sudo -i'
+alias sp='sudo -i -u postgres'
 alias ap='aptitude'
+alias psg='ps auxw | grep --color'
 
 alias ve='source env/bin/activate'
 alias de='deactivate'
 
-alias psg='ps auxw | grep --color'
-alias eng='env | grep --color'
+alias ag='ripgrep'
+alias dstat='dool'
+
+function mkenv {
+    python3 -m venv env;
+    source env/bin/activate;
+    pip install --upgrade pip setuptools wheel;
+}

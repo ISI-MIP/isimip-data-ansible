@@ -5,8 +5,49 @@
     - apache2-utils
     - python3-certbot-nginx
     state: present
+  notify: Restart nginx
 
-- name: Copy 502.html
+- name: Allow nginx to connect to upstream services
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect
+    state: true
+    persistent: true
+
+- name: Copy conf.d
   copy:
-    src: 502.html
-    dest: /srv/www/htdocs/502.html
+    src: "conf.d/{{ item }}"
+    dest: /etc/nginx/conf.d/{{ item }}
+  loop:
+  - limit.conf
+
+- name: Create snippets directory
+  file:
+    path: /etc/nginx/snippets/
+    state: directory
+
+- name: Copy snippets
+  copy:
+    src: "snippets/{{ item }}"
+    dest: /etc/nginx/snippets/{{ item }}
+  loop:
+  - content-disposition.conf
+  - cors.conf
+  - error.conf
+  - limit.conf
+  - ssl.conf
+
+- name: Copy index.html
+  template:
+    src: index.html
+    dest: /srv/www/htdocs/index.html
+  notify: Restart nginx
+
+- name: Copy htdocs
+  copy:
+    src: "htdocs/{{ item }}"
+    dest: "/srv/www/htdocs/{{ item }}"
+  loop:
+    - 502.html
+    - 503.html
+    - 50x.html
+  notify: Restart nginx

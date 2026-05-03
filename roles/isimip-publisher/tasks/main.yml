@@ -1,17 +1,3 @@
-- name: Add the isimip group
-  group:
-    name: isimip
-    gid: 2000
-    state: present
-
-- name: Add the isimip user
-  user:
-    name: isimip
-    comment: isimip user
-    uid: 2000
-    group: isimip
-    shell: /bin/bash
-
 - name: Install dependencies
   zypper:
     name:
@@ -22,12 +8,16 @@
     - geos-devel
     state: present
 
-- name: Clone the isimip-publisher repo
-  git:
-    repo: 'https://github.com/ISI-MIP/isimip-publisher'
-    dest: /home/isimip/isimip-publisher
-    update: no
+- name: Clone repositories
+  become: true
   become_user: isimip
+  git:
+    repo: "https://github.com/ISI-MIP/{{ item }}"
+    dest: "/home/isimip/code/isimip/{{ item }}"
+    update: no
+  loop:
+  - isimip-publisher
+  - isimip-utils
 
 - name: Create /data
   file:

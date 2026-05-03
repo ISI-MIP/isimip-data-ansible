@@ -1,31 +1,57 @@
-- name: Copy /root/.bash_aliases
+# /root/
+
+- name: red prompt for root
+  lineinfile:
+    dest: /root/.bashrc
+    line: >-
+      export PS1='\[\e[0;31m\]\u@\h\[\e[0m\]:\w# '
+    create: yes
+
+- name: .bash_aliases in .bashrc
+  lineinfile:
+    dest: /root/.bashrc
+    line: ". /root/.bash_aliases"
+
+- name: copy bash_aliases to /root/.bash_aliases
   copy:
     src: bash_aliases
     dest: /root/.bash_aliases
 
-- name: Copy/etc/skel/.bash_aliases
-  copy:
-    src: bash_aliases
-    dest: /etc/skel/.bash_aliases
-
-- name: Include .bash_aliases in /root/.bashrc
-  lineinfile:
-    dest: /root/.bashrc
-    line: "source /root/.bash_aliases"
-    create: yes
-
-- name: Include .bash_aliases in /etc/skel/.bashrc
-  lineinfile:
-    dest: /etc/skel/.bashrc
-    line: "source ~/.bash_aliases"
-    create: yes
-
-- name: Copy /root/.emacs
+- name: copy emacs to /root/.emacs
   copy:
     src: emacs
     dest: /root/.emacs
 
-- name: Copy /etc/skel/.emacs
+- name: EDITOR in /root/.bashrc
+  lineinfile:
+    dest: /root/.bashrc
+    line: "export EDITOR='emacs -nw'"
+
+# /etc/skel/
+
+- name: red prompt for skel
+  lineinfile:
+    dest: /etc/skel/.bashrc
+    line: >-
+      export PS1='\[\e[0;32m\]\u@\h\[\e[0m\]:\w# '
+    create: yes
+
+- name: .bash_aliases in .bashrc
+  lineinfile:
+    dest: /etc/skel/.bashrc
+    line: ". /etc/skel/.bash_aliases"
+
+- name: copy bash_aliases to /etc/skel/.bash_aliases
+  copy:
+    src: bash_aliases
+    dest: /etc/skel/.bash_aliases
+
+- name: copy emacs to /etc/skel/.emacs
   copy:
     src: emacs
     dest: /etc/skel/.emacs
+
+- name: EDITOR in /etc/skel/.bashrc
+  lineinfile:
+    dest: /etc/skel/.bashrc
+    line: "export EDITOR='emacs -nw'"

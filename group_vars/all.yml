@@ -1,4 +1,0 @@
-env: prod
-data_url: data.isimip.org
-data_gunicorn_port: 9000
-files_url: files.isimip.org

@@ -4,7 +4,8 @@ packages:
 - screen
 - rsync
 - git-core
-- the_silver_searcher
+- git-crypt
+- ripgrep
 - tree
 
 # editor
@@ -18,7 +19,7 @@ packages:
 - bzip2
 
 # monitoring
-- dstat
+- dool
 - htop
 - iotop
 - iftop
@@ -36,3 +37,8 @@ packages:
 - pv
 - lsof
 - inxi
+
+# netcdf
+- netcdf-devel
+- nco
+- cdo

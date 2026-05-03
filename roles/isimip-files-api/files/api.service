@@ -1,0 +1,41 @@
+[Unit]
+Description=isimip-files-api v2 gunicorn daemon
+After=network.target
+
+[Service]
+User=isimip-files-api
+Group=isimip
+
+WorkingDirectory=/srv/www/api/v2/
+
+LogsDirectory=flask/api/v2/ gunicorn/api/v2/
+RuntimeDirectory=gunicorn/api/v2/
+
+Environment=FLASK_APP=isimip_files_api.app
+Environment=FLASK_ENV=production
+Environment=FLASK_CONFIG=config.toml
+Environment=FLASK_REDIS_URL=redis://localhost:6379/1
+
+Environment=GUNICORN_BIN=env/bin/gunicorn
+Environment=GUNICORN_WORKER=3
+Environment=GUNICORN_PORT=9000
+Environment=GUNICORN_TIMEOUT=120
+Environment=GUNICORN_PID_FILE=/run/gunicorn/api/v2/pid
+Environment=GUNICORN_ACCESS_LOG_FILE=/var/log/gunicorn/api/v2/access.log
+Environment=GUNICORN_ERROR_LOG_FILE=/var/log/gunicorn/api/v2/error.log
+
+ExecStart=/bin/sh -c '${GUNICORN_BIN} \
+  --workers ${GUNICORN_WORKER} \
+  --pid ${GUNICORN_PID_FILE} \
+  --bind localhost:${GUNICORN_PORT} \
+  --timeout ${GUNICORN_TIMEOUT} \
+  --access-logfile ${GUNICORN_ACCESS_LOG_FILE} \
+  --error-logfile ${GUNICORN_ERROR_LOG_FILE} \
+  "isimip_files_api.app:create_app()"'
+
+ExecReload=/bin/sh -c '/usr/bin/pkill -HUP -F ${GUNICORN_PID_FILE}'
+
+ExecStop=/bin/sh -c '/usr/bin/pkill -TERM -F ${GUNICORN_PID_FILE}'
+
+[Install]
+WantedBy=multi-user.target

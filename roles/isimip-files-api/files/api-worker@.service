@@ -1,5 +1,5 @@
 [Unit]
-Description=RQ worker for isimip-files-api (#%i)
+Description=RQ worker for isimip-files-api v2 (#%i)
 After=network.target
 
 [Service]
@@ -7,13 +7,24 @@ Type=simple
 User=isimip-files-api
 Group=isimip
 
-WorkingDirectory=/srv/www/api
+WorkingDirectory=/srv/www/api/v2/
+
 Environment=LANG=en_US.UTF-8
 Environment=LC_ALL=en_US.UTF-8
 Environment=LC_LANG=en_US.UTF-8
-ExecStart=/srv/www/api/env/bin/rq worker -w 'isimip_files_api.worker.LogWorker'
+
+Environment=FLASK_APP=isimip_files_api.app
+Environment=FLASK_ENV=production
+Environment=FLASK_CONFIG=config.toml
+
+Environment=RQ_BIN=env/bin/rq
+Environment=RQ_WORKER_CLASS=isimip_files_api.worker.Worker
+Environment=RQ_REDIS_URL=redis://localhost:6379/1
+
+ExecStart=/bin/sh -c '${RQ_BIN} worker'
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
+
 PrivateTmp=true
 Restart=always
 RestartSec=5

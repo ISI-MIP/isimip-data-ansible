@@ -1,6 +1,31 @@
 - name: Create config for files.isimip.org
   template:
-    src: "{{ files_url }}.conf"
+    src: nginx.conf
     dest: /etc/nginx/vhosts.d/{{ files_url }}.conf
-  notify:
-  - Restart nginx
+
+- name: Create public directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: isimip
+    group: isimip
+    mode: '0755'
+  loop:
+  - /data/public
+  - /data/dev/public
+
+- name: Set SELinux file context for nginx-accessible directories
+  community.general.sefcontext:
+    target: '{{ item }}(/.*)?'
+    setype: httpd_sys_content_t
+    state: present
+  loop:
+  - /data/public
+  - /data/dev/public
+
+- name: Apply SELinux file contexts
+  ansible.builtin.command: restorecon -Rv {{ item }}
+  loop:
+  - /data/public
+  - /data/dev/public
+  changed_when: false

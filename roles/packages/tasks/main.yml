@@ -1,4 +1,34 @@
-- name: Install common packages
-  zypper:
+- name: Check if non-OSS repository is enabled
+  ansible.builtin.command: zypper --xmlout lr openSUSE:repo-non-oss
+  register: repo_status
+  changed_when: false
+
+- name: Enable non-OSS repository
+  ansible.builtin.command: zypper modifyrepo --enable openSUSE:repo-non-oss
+  when: "'enabled=\"1\"' not in repo_status.stdout"
+
+- name: Add utilities repo
+  community.general.zypper_repository:
+    repo: https://download.opensuse.org/repositories/utilities/16.0/utilities.repo
+    state: present
+    auto_import_keys: true
+    runrefresh: true
+
+- name: Add server:monitoring repo
+  community.general.zypper_repository:
+    repo: https://download.opensuse.org/repositories/server:monitoring/16.0/server:monitoring.repo
+    state: present
+    auto_import_keys: true
+    runrefresh: true
+
+- name: Add science repo
+  community.general.zypper_repository:
+    repo: https://download.opensuse.org/repositories/science/16.0/science.repo
+    state: present
+    auto_import_keys: true
+    runrefresh: true
+
+- name: Install packages
+  community.general.zypper:
     name: "{{ packages }}"
     state: present

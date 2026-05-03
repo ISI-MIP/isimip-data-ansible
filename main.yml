@@ -9,16 +9,24 @@
     tags: config
   - role: packages
     tags: packages
+  - role: firewalld
+    tags: firewalld
   - role: nginx
     tags: nginx
   - role: redis
     tags: redis
+  - role: user
+    tags: user
 
 - name: data.isimip.org
   hosts: data
   become: yes
   become_user: root
   roles:
+  - role: postgres
+    tags: postgres
+  - role: nodejs
+    tags: nodejs
   - role: isimip-data
     tags: isimip-data
 

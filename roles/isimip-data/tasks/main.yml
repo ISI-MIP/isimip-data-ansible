@@ -1,68 +1,37 @@
-- name: Add the isimip group
-  group:
-    name: isimip
-    gid: 2000
-    state: present
-
-- name: Add the isimip user
-  user:
-    name: isimip
-    comment: isimip user
-    uid: 2000
-    group: isimip
-    shell: /bin/bash
-
-- name: Install PostgreSQL 15
-  zypper:
-    name:
-    - postgresql15
-    - postgresql15-server
-    - postgresql15-devel
-    state: present
-- name: Create /srv/www/prod or /srv/www/dev for isimip-data
+- name: Prepare web roots
   file:
-    path: /srv/www/{{ env }}
+    path: /srv/www/{{ item.app }}
     state: directory
     owner: isimip
     group: isimip
+  loop: "{{ environments }}"
+
+- name: Create links for web roots
+  become: true
+  become_user: isimip
+  file:
+    src: /srv/www/{{ item.app }}
+    dest: /home/isimip/{{ item.app }}
+    state: link
+  loop: "{{ environments }}"
 
 - name: Clone the isimip-data repo
-  become: yes
+  become: true
   become_user: isimip
   git:
     repo: 'https://github.com/ISI-MIP/isimip-data'
-    dest: /srv/www/{{ env }}
+    dest: /srv/www/{{ item.app }}
     update: no
-  notify:
-  - Run manage.py deploy
-  - Restart gunicorn
-
-- name: Upgrade the isimip-data repo
-  become: yes
-  become_user: isimip
-  git:
-    repo: 'https://github.com/ISI-MIP/isimip-data'
-    dest: /srv/www/{{ env }}
-    update: yes
-    force: yes
-  notify:
-  - Run manage.py deploy
-  - Restart gunicorn
-  tags:
-  - upgrade
-  - never
+  loop: "{{ environments }}"
 
 - name: Copy systemd service files
   template:
-    src: "data.service"
-    dest: "/etc/systemd/system/{{ env }}.service"
-  notify:
-  - Restart gunicorn
+    src: systemd.service
+    dest: "/etc/systemd/system/{{ item.app }}.service"
+  loop: "{{ environments }}"
 
-- name: Create nginx config for data.isimip.org
+- name: Copy nginx config
   template:
-    src: "{{ data_url }}.conf"
-    dest: /etc/nginx/vhosts.d/{{ data_url }}.conf
-  when: "'data' in group_names"
-  notify:
-  - Restart nginx
+    src: nginx.conf
+    dest: /etc/nginx/vhosts.d/{{ item.data_url }}.conf
+  loop: "{{ environments }}"

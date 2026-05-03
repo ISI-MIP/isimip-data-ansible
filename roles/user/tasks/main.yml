@@ -1,0 +1,13 @@
+- name: Add the isimip group
+  group:
+    name: isimip
+    gid: 2000
+    state: present
+
+- name: Add the isimip user
+  user:
+    name: isimip
+    comment: isimip user
+    uid: 2000
+    group: isimip
+    shell: /bin/bash

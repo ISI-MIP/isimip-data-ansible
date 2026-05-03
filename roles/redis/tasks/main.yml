@@ -5,15 +5,12 @@
 
 - name: Copy the default redis config
   copy:
-    src: /etc/redis/default.conf.example
-    dest: /etc/redis/redis.conf
+    src: /etc/redis/redis.default.conf.template
+    dest: /etc/redis/default.conf
     remote_src: yes
+    owner: root
+    group: redis
+    mode: '0640'
+    force: no
   notify:
-  - Restart redis
-
-- name: Copy systemd service file
-  copy:
-    src: redis.service
-    dest: /etc/systemd/system/redis.service
-  notify:
-  - Restart redis
+    - Restart redis

@@ -1,7 +1,7 @@
-- name: Add the isimip group
-  group:
-    name: isimip
-    gid: 2000
+- name: Install dependencies
+  zypper:
+    name:
+    - gdal-devel
     state: present
 
 - name: Add the isimip-files-api user
@@ -12,40 +12,58 @@
     group: isimip
     shell: /bin/bash
 
-- name: Create /srv/www/api for isimip-data
+- name: Prepare /srv/www/api
   file:
     path: /srv/www/api
     state: directory
     owner: isimip-files-api
     group: isimip
+    mode: '0755'
+
+- name: Create link for /srv/www/api
+  become: true
+  become_user: isimip-files-api
+  file:
+    src: /srv/www/api
+    dest: /home/isimip-files-api/api
+    state: link
 
 - name: Clone the isimip-files-api repo
+  become: true
+  become_user: isimip-files-api
   git:
     repo: 'https://github.com/ISI-MIP/isimip-files-api'
-    dest: /srv/www/api
+    dest: /srv/www/api/v2
     update: no
-  become_user: isimip-files-api
-  notify:
-  - Restart app
-  - Restart workers
 
 - name: Copy systemd service files
   copy:
     src: "{{ item }}"
     dest: "/etc/systemd/system/{{ item }}"
-  with_items:
-  - api-app.service
+  loop:
+  - api.service
   - api-worker@.service
-  notify:
-  - Restart app
-  - Restart workers
 
-- name: /data/api/public is present on files.isimip.org
+- name: Create public directories
   file:
     path: "{{ item }}"
     state: directory
     owner: isimip-files-api
     group: isimip
     mode: '0755'
-  with_items:
-  - /data/api/public
+  loop:
+  - /data/api/v2/public
+
+- name: Set SELinux file context for nginx-accessible directories
+  community.general.sefcontext:
+    target: '{{ item }}(/.*)?'
+    setype: httpd_sys_content_t
+    state: present
+  loop:
+  - /data/api/v2/public
+
+- name: Apply SELinux file contexts
+  ansible.builtin.command: restorecon -Rv {{ item }}
+  loop:
+  - /data/api/v2/public
+  changed_when: false

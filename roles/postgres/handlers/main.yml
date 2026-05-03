@@ -1,5 +1,5 @@
-- name: Restart redis
+- name: Restart postgresql
   service:
-    name: redis@default
+    name: postgresql
     state: restarted
     enabled: true
