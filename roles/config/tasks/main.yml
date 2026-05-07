@@ -10,7 +10,7 @@
 - name: .bash_aliases in .bashrc
   lineinfile:
     dest: /root/.bashrc
-    line: ". /root/.bash_aliases"
+    line: "source ~/.bash_aliases"
 
 - name: copy bash_aliases to /root/.bash_aliases
   copy:
@@ -39,7 +39,7 @@
 - name: .bash_aliases in .bashrc
   lineinfile:
     dest: /etc/skel/.bashrc
-    line: ". /etc/skel/.bash_aliases"
+    line: "source ~/.bash_aliases"
 
 - name: copy bash_aliases to /etc/skel/.bash_aliases
   copy:

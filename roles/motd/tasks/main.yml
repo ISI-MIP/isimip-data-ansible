@@ -1,0 +1,4 @@
+- name: Copy motd to /etc/motd
+  copy:
+    src: "{{ inventory_hostname }}"
+    dest: /etc/motd
