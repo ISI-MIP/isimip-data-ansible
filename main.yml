@@ -31,6 +31,8 @@
     tags: nodejs
   - role: isimip-data
     tags: isimip-data
+  - role: isimip-doi
+    tags: isimip-doi
 
 - name: files.isimip.org
   hosts: files

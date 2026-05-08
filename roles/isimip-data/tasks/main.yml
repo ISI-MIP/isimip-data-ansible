@@ -1,4 +1,4 @@
-- name: Prepare web roots
+- name: Prepare directories
   file:
     path: /srv/www/{{ item.app }}
     state: directory
@@ -6,7 +6,7 @@
     group: isimip
   loop: "{{ environments }}"
 
-- name: Create links for web roots
+- name: Create links
   become: true
   become_user: isimip
   file:

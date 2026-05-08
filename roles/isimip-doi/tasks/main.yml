@@ -1,0 +1,32 @@
+- name: Prepare directory
+  file:
+    path: /srv/www/doi
+    state: directory
+    owner: isimip
+    group: isimip
+
+- name: Create link
+  become: true
+  become_user: isimip
+  file:
+    src: /srv/www/doi
+    dest: /home/isimip/doi
+    state: link
+
+- name: Clone the isimip-doi repo
+  become: true
+  become_user: isimip
+  git:
+    repo: https://github.com/ISI-MIP/isimip-doi
+    dest: /srv/www/doi
+    update: no
+
+- name: Copy systemd service files
+  template:
+    src: systemd.service
+    dest: /etc/systemd/system/doi.service
+
+- name: Copy nginx config
+  template:
+    src: nginx.conf
+    dest: "/etc/nginx/vhosts.d/{{ draft_url }}.conf"
