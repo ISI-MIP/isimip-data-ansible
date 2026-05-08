@@ -19,6 +19,7 @@
     dest: /etc/nginx/conf.d/{{ item }}
   loop:
   - limit.conf
+  - security.conf
 
 - name: Create snippets directory
   file:
@@ -47,7 +48,8 @@
     src: "htdocs/{{ item }}"
     dest: "/srv/www/htdocs/{{ item }}"
   loop:
-    - 502.html
-    - 503.html
-    - 50x.html
+  - 404.html
+  - 502.html
+  - 503.html
+  - 50x.html
   notify: Restart nginx
