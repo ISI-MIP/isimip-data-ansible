@@ -1,9 +1,11 @@
-- name: Install nginx and certbot
+- name: Install nginx and other packages
   zypper:
     name:
     - nginx
+    - nginx-module-geoip2
     - apache2-utils
     - python3-certbot-nginx
+    - geoipupdate
     state: present
   notify: Restart nginx
 
@@ -20,6 +22,12 @@
   loop:
   - limit.conf
   - verify.conf
+
+- name: Copy conf.d/json.conf
+  copy:
+    src: conf.d/json.conf
+    dest: /etc/nginx/conf.d/json.conf
+  when: maxmind is not false
 
 - name: Create snippets directory
   file:
@@ -60,3 +68,75 @@
   - 50x.html
   - verify.html
   notify: Restart nginx
+
+- name: Enable ngx_stream_geoip2_module in nginx.conf
+  ansible.builtin.replace:
+    path: /etc/nginx/nginx.conf
+    regexp: '^\s*#\s*(load_module\s+/usr/lib64/nginx/modules/ngx_http_geoip2_module\.so\s*;)'
+    replace: '\1'
+  notify: Restart nginx
+
+- name: Replace AccountID in /etc/GeoIP.conf
+  ansible.builtin.replace:
+    path: /etc/GeoIP.conf
+    regexp: '^(AccountID\s+).*$'
+    replace: '\g<1>{{ maxmind.id }}'
+  when: maxmind is not false
+
+- name: Replace LicenseKey in /etc/GeoIP.conf
+  ansible.builtin.replace:
+    path: /etc/GeoIP.conf
+    regexp: '^(LicenseKey\s+).*$'
+    replace: '\g<1>{{ maxmind.key }}'
+  when: maxmind is not false
+
+- name: Check if GeoIP database exists
+  stat:
+    path: /var/lib/GeoIP/GeoLite2-City.mmdb
+  register: geoip_db
+
+- name: Run geoipupdate once
+  command: geoipupdate
+  when:
+    - maxmind is not false
+    - not geoip_db.stat.exists
+
+- name: Install geoipupdate systemd service
+  copy:
+    dest: /etc/systemd/system/geoipupdate.service
+    content: |
+      [Unit]
+      Description=Update MaxMind GeoIP databases
+      After=network-online.target
+      Wants=network-online.target
+
+      [Service]
+      Type=oneshot
+      ExecStart=/usr/bin/geoipupdate
+    mode: '0644'
+  when: maxmind is not false
+
+- name: Install geoipupdate systemd timer
+  copy:
+    dest: /etc/systemd/system/geoipupdate.timer
+    content: |
+      [Unit]
+      Description=Run geoipupdate weekly
+
+      [Timer]
+      OnCalendar=Wed 04:00
+      Persistent=true
+      RandomizedDelaySec=1h
+
+      [Install]
+      WantedBy=timers.target
+    mode: '0644'
+  when: maxmind is not false
+
+- name: Enable and start geoipupdate timer
+  systemd:
+    name: geoipupdate.timer
+    enabled: true
+    state: started
+    daemon_reload: true
+  when: maxmind is not false
