@@ -6,6 +6,7 @@
     - apache2-utils
     - python3-certbot-nginx
     - geoipupdate
+    - goaccess
     state: present
   notify: Restart nginx
 
