@@ -21,6 +21,7 @@
     src: "conf.d/{{ item }}"
     dest: /etc/nginx/conf.d/{{ item }}
   loop:
+  - json.conf
   - limit.conf
   - verify.conf
 
@@ -43,8 +44,8 @@
   - content-disposition.conf
   - cors.conf
   - csp.conf
-  - limit.conf
   - error.conf
+  - gzip.conf
   - ssl.conf
 
 - name: Copy index.html
