@@ -12,7 +12,9 @@ LogsDirectory=django/{{ item.app }} gunicorn/{{ item.app }}
 RuntimeDirectory=gunicorn/{{ item.app }}
 
 Environment=GUNICORN_BIN=env/bin/gunicorn
-Environment=GUNICORN_WORKER=3
+Environment=GUNICORN_WORKER_CLASS=gthread
+Environment=GUNICORN_WORKERS=2
+Environment=GUNICORN_THREADS=4
 Environment=GUNICORN_PORT={{ item.gunicorn_port }}
 Environment=GUNICORN_TIMEOUT=30
 Environment=GUNICORN_PID_FILE=/run/gunicorn/{{ item.app }}/pid
@@ -20,7 +22,9 @@ Environment=GUNICORN_ACCESS_LOG_FILE=/var/log/gunicorn/{{ item.app }}/access.log
 Environment=GUNICORN_ERROR_LOG_FILE=/var/log/gunicorn/{{ item.app }}/error.log
 
 ExecStart=/bin/sh -c '${GUNICORN_BIN} \
-  --workers ${GUNICORN_WORKER} \
+  --worker-class ${GUNICORN_WORKER_CLASS} \
+  --workers ${GUNICORN_WORKERS} \
+  --threads ${GUNICORN_THREADS} \
   --timeout ${GUNICORN_TIMEOUT} \
   --pid ${GUNICORN_PID_FILE} \
   --bind 127.0.0.1:${GUNICORN_PORT} \
