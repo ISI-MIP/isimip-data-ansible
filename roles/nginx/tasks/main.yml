@@ -65,6 +65,7 @@
     dest: "/srv/www/internal/{{ item }}"
   loop:
   - 404.html
+  - 429.html
   - 502.html
   - 503.html
   - 50x.html
